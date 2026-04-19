@@ -678,7 +678,7 @@ function hideLoading() {
 // GEMINI AI INTEGRATION
 // ==========================================
 
-const GEMINI_API_KEY = "AIzaSyD6135vISLafbDxdGlFTgvXvlOBBirVvS4";
+const GEMINI_API_KEY = "enter the API Key here ";
 
 async function askGeminiAPI(resumeText, githubData, linkedinText) {
     const prompt = `
