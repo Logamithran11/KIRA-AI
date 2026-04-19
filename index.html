@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KIRA AI – Analyze your Resume, GitHub & LinkedIn profile to get personalized career insights, job recommendations, and improvement suggestions.">
+    <title>KIRA AI – Resume, GitHub & LinkedIn Analyzer</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ============ AMBIENT BACKGROUND ============ -->
+    <div class="ambient-bg" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- ============ AUTH SCREEN ============ -->
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-container">
+            <!-- Left: Branding -->
+            <div class="auth-branding">
+                <div class="auth-brand-content">
+                    <div class="auth-logo">
+                        <div class="auth-logo-icon" style="background: transparent;">
+                            <img src="logo.png" alt="KIRA AI Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px; filter: drop-shadow(0 0 10px rgba(124,58,237,0.3));">
+                        </div>
+                        <h1>KIRA <span class="text-gradient">AI</span></h1>
+                    </div>
+                    <p class="auth-tagline">Your intelligent career analysis assistant</p>
+                    <div class="auth-features">
+                        <div class="auth-feature">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Resume Analysis & Scoring</span>
+                        </div>
+                        <div class="auth-feature">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub Profile Insights</span>
+                        </div>
+                        <div class="auth-feature">
+                            <i class="fab fa-linkedin"></i>
+                            <span>LinkedIn Optimization</span>
+                        </div>
+                        <div class="auth-feature">
+                            <i class="fas fa-briefcase"></i>
+                            <span>AI Job Matching</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Auth Form -->
+            <div class="auth-form-side">
+                <div class="auth-card">
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" data-tab="login" id="loginTab">Sign In</button>
+                        <button class="auth-tab" data-tab="signup" id="signupTab">Sign Up</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="loginForm" class="auth-form active">
+                        <div class="form-group">
+                            <label for="loginEmail"><i class="fas fa-envelope"></i> Email</label>
+                            <input type="email" id="loginEmail" placeholder="you@example.com" required autocomplete="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword"><i class="fas fa-lock"></i> Password</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password" class="password-input">
+                                <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                                    <i class="far fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full" id="loginBtn">
+                            <span class="btn-text">Sign In</span>
+                            <span class="btn-loader hidden"><i class="fas fa-spinner fa-spin"></i></span>
+                        </button>
+                    </form>
+
+                    <!-- Signup Form -->
+                    <form id="signupForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="signupName"><i class="fas fa-user"></i> Full Name</label>
+                            <input type="text" id="signupName" placeholder="John Doe" required autocomplete="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="signupEmail"><i class="fas fa-envelope"></i> Email</label>
+                            <input type="email" id="signupEmail" placeholder="you@example.com" required autocomplete="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword"><i class="fas fa-lock"></i> Password</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="signupPassword" placeholder="Min 6 characters" required minlength="6" autocomplete="new-password" class="password-input">
+                                <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                                    <i class="far fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full" id="signupBtn">
+                            <span class="btn-text">Create Account</span>
+                            <span class="btn-loader hidden"><i class="fas fa-spinner fa-spin"></i></span>
+                        </button>
+                    </form>
+
+                    <div class="auth-divider">
+                        <span>or continue with</span>
+                    </div>
+
+                    <button class="btn btn-google" id="googleSignInBtn">
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        <span>Google</span>
+                    </button>
+
+                    <p id="authError" class="auth-error hidden"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ LOADING OVERLAY ============ -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-content">
+            <div class="loading-spinner">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+            </div>
+            <h2 id="loadingTitle" class="loading-title">Analyzing...</h2>
+            <p id="loadingStatus" class="loading-status">Preparing analysis engine</p>
+            <div class="loading-progress">
+                <div id="loadingBar" class="loading-bar"></div>
+            </div>
+            <div id="loadingTip" class="loading-tip"></div>
+        </div>
+    </div>
+
+    <!-- ============ MAIN APP LAYOUT ============ -->
+    <div id="appLayout" class="app-layout hidden">
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon" style="background: transparent;">
+                        <img src="logo.png" alt="KIRA AI Logo" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                    <div class="logo-text">
+                        <h1>KIRA</h1>
+                        <span class="logo-badge">AI</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="sidebar-user" id="sidebarUser">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-info">
+                    <span class="user-name" id="userName">User</span>
+                    <span class="user-email" id="userEmail">user@email.com</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard" id="nav-dashboard">
+                    <i class="fas fa-th-large"></i><span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="analyze" id="nav-analyze">
+                    <i class="fas fa-search-plus"></i><span>Analyze</span>
+                </a>
+                <a href="#" class="nav-item" data-page="results" id="nav-results">
+                    <i class="fas fa-chart-bar"></i><span>Results</span>
+                </a>
+                <a href="#" class="nav-item" data-page="history" id="nav-history">
+                    <i class="fas fa-clock-rotate-left"></i><span>History</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <i class="fas fa-sun" id="themeIconSun"></i>
+                    <i class="fas fa-moon hidden" id="themeIconMoon"></i>
+                    <span id="themeLabel">Light Mode</span>
+                </button>
+                <button class="btn-logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+                </button>
+                <div class="sidebar-info">
+                    <i class="fas fa-shield-alt"></i><span>Data secured with Firebase</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <button id="menuToggle" class="menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="mobile-logo">
+                <img src="logo.png" alt="KIRA AI Logo" style="width: 24px; height: 24px; object-fit: contain;">
+                <span>KIRA <span class="logo-badge">AI</span></span>
+            </div>
+            <button class="btn-icon" id="mobileThemeToggle" aria-label="Toggle theme"><i class="fas fa-sun"></i></button>
+            <button class="btn-icon" id="mobileLogout" aria-label="Logout"><i class="fas fa-sign-out-alt"></i></button>
+        </header>
+
+        <!-- Sidebar Overlay (Mobile) -->
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+        <!-- ============ MAIN CONTENT ============ -->
+        <main class="main-content">
+
+            <!-- ====== DASHBOARD PAGE ====== -->
+            <section id="page-dashboard" class="page active">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Welcome back, <span id="dashboardUserName" class="text-gradient">User</span></h2>
+                        <p class="page-subtitle">Your intelligent career analysis assistant</p>
+                    </div>
+                </div>
+
+                <!-- Stats Row -->
+                <div class="stats-row" id="statsRow">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="--accent:#a78bfa;"><i class="fas fa-chart-line"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statAnalyses">0</span>
+                            <span class="stat-label">Analyses Done</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="--accent:#60a5fa;"><i class="fas fa-trophy"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statBestScore">--</span>
+                            <span class="stat-label">Best Score</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="--accent:#34d399;"><i class="fas fa-briefcase"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-value stat-role" id="statBestRole">--</span>
+                            <span class="stat-label">Top Role Match</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero / CTA -->
+                <div class="hero-section">
+                    <div class="hero-card">
+                        <div class="hero-glow"></div>
+                        <div class="hero-icon-group">
+                            <div class="hero-icon"><i class="fas fa-file-alt"></i></div>
+                            <div class="hero-icon"><i class="fab fa-github"></i></div>
+                            <div class="hero-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                        <h3>Analyze Your Career Profile</h3>
+                        <p>Upload your resume, connect your GitHub, and paste your LinkedIn details to receive AI-powered career insights.</p>
+                        <button class="btn btn-primary btn-glow" id="startAnalysisBtn">
+                            <i class="fas fa-rocket"></i> Start New Analysis
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Feature Cards -->
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon" style="--accent:#a78bfa;"><i class="fas fa-file-alt"></i></div>
+                        <h4>Resume Analysis</h4>
+                        <p>Deep skill extraction, section detection, and completeness scoring</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="--accent:#60a5fa;"><i class="fab fa-github"></i></div>
+                        <h4>GitHub Analysis</h4>
+                        <p>Repository analysis, language proficiency, and activity tracking</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="--accent:#34d399;"><i class="fab fa-linkedin"></i></div>
+                        <h4>LinkedIn Analysis</h4>
+                        <p>Profile optimization, keyword analysis, and experience scoring</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="--accent:#f472b6;"><i class="fas fa-briefcase"></i></div>
+                        <h4>AI Job Matching</h4>
+                        <p>Intelligent role recommendations with match percentages</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ====== ANALYZE PAGE ====== -->
+            <section id="page-analyze" class="page">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Profile Analysis</h2>
+                        <p class="page-subtitle">Provide your career data for comprehensive analysis</p>
+                    </div>
+                </div>
+
+                <div class="input-sections">
+                    <!-- Resume Upload -->
+                    <div class="input-card" style="--accent:#a78bfa;">
+                        <div class="input-card-header">
+                            <div class="input-icon"><i class="fas fa-file-alt"></i></div>
+                            <div>
+                                <h3>Resume Upload</h3>
+                                <p>Upload your resume in PDF or DOCX format</p>
+                            </div>
+                        </div>
+                        <div id="dropZone" class="drop-zone">
+                            <div class="drop-zone-content">
+                                <div class="drop-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                                <p class="drop-text">Drag & drop your resume here</p>
+                                <p class="drop-subtext">or click to browse files</p>
+                                <span class="drop-formats">PDF, DOCX • Max 10MB</span>
+                            </div>
+                            <input type="file" id="resumeInput" accept=".pdf,.docx" hidden>
+                        </div>
+                        <div id="fileInfo" class="file-info hidden">
+                            <i class="fas fa-file-check"></i>
+                            <span id="fileName"></span>
+                            <button id="removeFile" class="btn-icon-sm" aria-label="Remove file"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- GitHub Input -->
+                    <div class="input-card" style="--accent:#60a5fa;">
+                        <div class="input-card-header">
+                            <div class="input-icon"><i class="fab fa-github"></i></div>
+                            <div>
+                                <h3>GitHub Profile</h3>
+                                <p>Enter your GitHub username to analyze repositories</p>
+                            </div>
+                        </div>
+                        <div class="input-field-wrapper">
+                            <div class="input-prefix"><i class="fab fa-github"></i><span>github.com/</span></div>
+                            <input type="text" id="githubInput" class="glass-input" placeholder="username" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <!-- LinkedIn Input -->
+                    <div class="input-card" style="--accent:#0a66c2;">
+                        <div class="input-card-header">
+                            <div class="input-icon" style="background:rgba(10,102,194,0.15);color:#0a66c2;"><i class="fab fa-linkedin"></i></div>
+                            <div>
+                                <h3>LinkedIn Details</h3>
+                                <p>Paste your LinkedIn profile information</p>
+                            </div>
+                        </div>
+
+                        <!-- LinkedIn URL (for reference) -->
+                        <div class="input-field-wrapper" style="margin-bottom:16px;">
+                            <div class="input-prefix"><i class="fab fa-linkedin"></i><span>Profile URL</span></div>
+                            <input type="url" id="linkedinUrl" class="glass-input" placeholder="https://linkedin.com/in/yourname (optional)" autocomplete="off">
+                        </div>
+
+                        <!-- LinkedIn how-to guide -->
+                        <div class="linkedin-guide">
+                            <button class="guide-toggle" id="linkedinGuideToggle" type="button">
+                                <i class="fas fa-circle-question"></i>
+                                <span>How to get your LinkedIn data</span>
+                                <i class="fas fa-chevron-down guide-arrow"></i>
+                            </button>
+                            <div class="guide-content" id="linkedinGuideContent">
+                                <div class="guide-steps">
+                                    <div class="guide-step">
+                                        <span class="step-num">1</span>
+                                        <span>Open your LinkedIn profile page</span>
+                                    </div>
+                                    <div class="guide-step">
+                                        <span class="step-num">2</span>
+                                        <span>Copy your <strong>Headline</strong>, <strong>About</strong>, <strong>Skills</strong>, and <strong>Experience</strong> sections</span>
+                                    </div>
+                                    <div class="guide-step">
+                                        <span class="step-num">3</span>
+                                        <span>Paste everything into the text box below</span>
+                                    </div>
+                                </div>
+                                <div class="guide-note">
+                                    <i class="fas fa-lock"></i>
+                                    <span>LinkedIn doesn't provide a free public API, so we analyze pasted text locally. Your data never leaves your browser.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <textarea id="linkedinInput" class="glass-textarea"
+                            placeholder="Paste your LinkedIn details here...&#10;&#10;Example format:&#10;&#10;Headline: Full Stack Developer at TechCorp&#10;&#10;About: Passionate developer with 3+ years of experience...&#10;&#10;Skills: JavaScript, React, Node.js, Python, SQL, Docker, AWS&#10;&#10;Experience:&#10;• Software Engineer at TechCorp (2022–Present)&#10;  - Built REST APIs serving 100K+ users&#10;  - Led migration to microservices architecture&#10;&#10;• Intern at StartupXYZ (2021–2022)&#10;  - Developed frontend components with React&#10;&#10;Education: B.Tech in Computer Science, MIT (2021)&#10;&#10;Projects: E-commerce platform, Real-time chat app"></textarea>
+                    </div>
+                </div>
+
+                <div class="analyze-actions">
+                    <button class="btn btn-primary btn-lg btn-glow" id="analyzeBtn">
+                        <i class="fas fa-bolt"></i> Analyze My Profile
+                    </button>
+                </div>
+            </section>
+
+            <!-- ====== RESULTS PAGE ====== -->
+            <section id="page-results" class="page">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Analysis Results</h2>
+                        <p class="page-subtitle">Your comprehensive career analysis report</p>
+                    </div>
+                    <div class="page-actions">
+                        <button class="btn btn-outline" id="reanalyzeBtn"><i class="fas fa-redo-alt"></i> Re-analyze</button>
+                    </div>
+                </div>
+
+                <!-- Score Cards -->
+                <div class="scores-grid">
+                    <div class="score-card" style="--accent:#a78bfa;">
+                        <div class="score-card-header"><i class="fas fa-file-alt"></i><span>Resume Score</span></div>
+                        <div class="score-circle-wrap">
+                            <svg class="score-circle" viewBox="0 0 120 120">
+                                <circle class="score-bg" cx="60" cy="60" r="52"/>
+                                <circle class="score-fg" cx="60" cy="60" r="52" id="resumeScoreCircle"/>
+                            </svg>
+                            <div class="score-value" id="resumeScoreValue">0</div>
+                        </div>
+                        <div class="score-weight">Weight: 40%</div>
+                    </div>
+                    <div class="score-card" style="--accent:#60a5fa;">
+                        <div class="score-card-header"><i class="fab fa-github"></i><span>GitHub Score</span></div>
+                        <div class="score-circle-wrap">
+                            <svg class="score-circle" viewBox="0 0 120 120">
+                                <circle class="score-bg" cx="60" cy="60" r="52"/>
+                                <circle class="score-fg" cx="60" cy="60" r="52" id="githubScoreCircle"/>
+                            </svg>
+                            <div class="score-value" id="githubScoreValue">0</div>
+                        </div>
+                        <div class="score-weight">Weight: 40%</div>
+                    </div>
+                    <div class="score-card" style="--accent:#34d399;">
+                        <div class="score-card-header"><i class="fab fa-linkedin"></i><span>LinkedIn Score</span></div>
+                        <div class="score-circle-wrap">
+                            <svg class="score-circle" viewBox="0 0 120 120">
+                                <circle class="score-bg" cx="60" cy="60" r="52"/>
+                                <circle class="score-fg" cx="60" cy="60" r="52" id="linkedinScoreCircle"/>
+                            </svg>
+                            <div class="score-value" id="linkedinScoreValue">0</div>
+                        </div>
+                        <div class="score-weight">Weight: 20%</div>
+                    </div>
+                    <div class="score-card final-score-card">
+                        <div class="score-card-header"><i class="fas fa-trophy"></i><span>Final Score</span></div>
+                        <div class="score-circle-wrap">
+                            <svg class="score-circle" viewBox="0 0 120 120">
+                                <circle class="score-bg" cx="60" cy="60" r="52"/>
+                                <circle class="score-fg" cx="60" cy="60" r="52" id="finalScoreCircle"/>
+                            </svg>
+                            <div class="score-value" id="finalScoreValue">0</div>
+                        </div>
+                        <div class="score-label" id="finalScoreLabel">Weighted Average</div>
+                    </div>
+                </div>
+
+                <!-- Detected Skills -->
+                <div class="results-section">
+                    <h3 class="section-title"><i class="fas fa-code"></i> Detected Skills</h3>
+                    <div class="skills-grid">
+                        <div class="skills-source">
+                            <h4><i class="fas fa-file-alt"></i> Resume</h4>
+                            <div id="resumeSkillsList" class="skills-list"></div>
+                        </div>
+                        <div class="skills-source">
+                            <h4><i class="fab fa-github"></i> GitHub</h4>
+                            <div id="githubSkillsList" class="skills-list"></div>
+                        </div>
+                        <div class="skills-source">
+                            <h4><i class="fab fa-linkedin"></i> LinkedIn</h4>
+                            <div id="linkedinSkillsList" class="skills-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job Recommendations -->
+                <div class="results-section">
+                    <h3 class="section-title"><i class="fas fa-briefcase"></i> Job Recommendations</h3>
+                    <div id="jobRecommendations" class="job-recommendations"></div>
+                </div>
+
+                <!-- Profile Consistency -->
+                <div class="results-section">
+                    <h3 class="section-title"><i class="fas fa-project-diagram"></i> Profile Consistency</h3>
+                    <div id="consistencyCheck" class="consistency-grid"></div>
+                </div>
+
+                <!-- Improvement Suggestions -->
+                <div class="results-section">
+                    <h3 class="section-title"><i class="fas fa-lightbulb"></i> Improvement Suggestions</h3>
+                    <div class="suggestions-grid">
+                        <div class="suggestion-card" style="--accent:#a78bfa;">
+                            <div class="suggestion-header"><i class="fas fa-file-alt"></i><h4>Resume</h4></div>
+                            <ul id="resumeSuggestions" class="suggestion-list"></ul>
+                        </div>
+                        <div class="suggestion-card" style="--accent:#60a5fa;">
+                            <div class="suggestion-header"><i class="fab fa-github"></i><h4>GitHub</h4></div>
+                            <ul id="githubSuggestions" class="suggestion-list"></ul>
+                        </div>
+                        <div class="suggestion-card" style="--accent:#34d399;">
+                            <div class="suggestion-header"><i class="fab fa-linkedin"></i><h4>LinkedIn</h4></div>
+                            <ul id="linkedinSuggestions" class="suggestion-list"></ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ====== HISTORY PAGE ====== -->
+            <section id="page-history" class="page">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Analysis History</h2>
+                        <p class="page-subtitle">Your past analysis records stored securely</p>
+                    </div>
+                </div>
+                <div id="historyContainer" class="history-container">
+                    <div class="history-empty" id="historyEmpty">
+                        <i class="fas fa-folder-open"></i>
+                        <h4>No Analysis Records Yet</h4>
+                        <p>Run your first analysis to see records here</p>
+                        <button class="btn btn-primary" id="historyStartBtn"><i class="fas fa-rocket"></i> Start Analysis</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast hidden">
+        <i id="toastIcon" class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
